@@ -1,0 +1,1 @@
+A simple Asteroids-like game built using pygame and python
