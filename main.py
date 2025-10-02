@@ -20,7 +20,17 @@ def main():
     deltaTimeSeconds = 0
 
     # Intantiate Player Object
-    pc = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+    player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+
+    # All rendering occurs here for clarity/clumping
+    def render():
+        # Fill screen with black
+        screen.fill((0,0,0))
+        # Draw player
+        player.draw(screen)
+        # Update display
+        pygame.display.flip()
+        # END RENDERING FUNCTIONS
 
     while(True):
 
@@ -29,20 +39,14 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
+        # Call for player to update itself
+        player.update(deltaTimeSeconds)
         
-
-        # Fill screen with black
-        screen.fill((0,0,0))
-
-        # Draw player
-        pc.draw(screen)
-
-        # Update display
-        pygame.display.flip()
+        # Render as final step before adjusting deltaTimeSeconds
+        render()
 
         # Enforce 60f maximum for now, and store delta time
         deltaTimeSeconds = mainGameClock.tick(60)/1000.0
-
 
 if __name__ == "__main__":
     main()
