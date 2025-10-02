@@ -1,4 +1,5 @@
 from constants import PLAYER_RADIUS, PLAYER_LINE_WIDTH
+from constants import PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED
 import pygame
 
 from circleshape import CircleShape
@@ -26,6 +27,7 @@ class Player(CircleShape):
 
         return [a,b,c]
         
+    # Override parent's draw method to draw player triangle
     def draw(self, screen):
         pygame.draw.polygon(
             screen,
@@ -33,3 +35,28 @@ class Player(CircleShape):
             self.triangle(),
             PLAYER_LINE_WIDTH
         )
+
+    # Support to rotate the player triangle 
+    #  based upon deltaTime paramater - dt
+    def rotate(self, dt):
+        self.rotation += PLAYER_TURN_SPEED * dt
+    
+    # Modify player's position
+    # Takes in deltaTime, in seconds, as dt
+    def move(self, dt):
+        # Create a unit vector in correct direction
+        forward = pygame.Vector2(0,1).rotate(self.rotation)
+        # Apply Movement at appropriate speed and direction
+        self.position += forward * PLAYER_MOVE_SPEED * dt        
+
+    # Catch rotate key-pressed and respond.
+    def update(self, dt):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.rotate(-dt)
+        if keys[pygame.K_d]:
+            self.rotate(dt)
+        if keys[pygame.K_w]:
+            self.move(dt)
+        if keys[pygame.K_s]:
+            self.move(-dt)
