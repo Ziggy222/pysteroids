@@ -19,6 +19,15 @@ def main():
     mainGameClock = pygame.time.Clock()
     deltaTimeSeconds = 0
 
+    # Set up object Groups for pygame
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    # Add Player to appropriate groups
+    Player.containers = (updatable, drawable)
+
+
+    
     # Intantiate Player Object
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
 
@@ -26,8 +35,11 @@ def main():
     def render():
         # Fill screen with black
         screen.fill((0,0,0))
-        # Draw player
-        player.draw(screen)
+        
+        # Draw all drawable objects
+        for object in drawable:
+            object.draw(screen)
+        
         # Update display
         pygame.display.flip()
         # END RENDERING FUNCTIONS
@@ -39,8 +51,8 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        # Call for player to update itself
-        player.update(deltaTimeSeconds)
+        # Update all updatable game objects
+        updatable.update(deltaTimeSeconds)
         
         # Render as final step before adjusting deltaTimeSeconds
         render()
