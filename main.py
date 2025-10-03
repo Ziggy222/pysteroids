@@ -7,6 +7,10 @@ from constants import *
 # Import Player support
 from player import Player
 
+# Import Asteroid support
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+
 def main():
 
     # Initialize all pygame modules
@@ -22,14 +26,20 @@ def main():
     # Set up object Groups for pygame
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
 
     # Add Player to appropriate groups
     Player.containers = (updatable, drawable)
 
+    # Set up Asteroid Groups
+    Asteroid.containers = (asteroids, updatable, drawable)
 
+    # Set up AsteroidField Group
+    AsteroidField.containers = (updatable)
     
-    # Intantiate Player Object
+    # Intantiate Objects
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+    asteroidField = AsteroidField()
 
     # All rendering occurs here for clarity/clumping
     def render():
