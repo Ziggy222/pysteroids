@@ -1,6 +1,6 @@
 from constants import PLAYER_RADIUS, PLAYER_LINE_WIDTH
 from constants import PLAYER_TURN_SPEED, PLAYER_MOVE_SPEED
-from constants import SHOT_SPEED
+from constants import SHOT_SPEED, PLAYER_SHOOT_COOLDOWN
 
 import pygame
 
@@ -14,6 +14,7 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         # Set default rotation to 0
         self.rotation = 0
+        self.shootCooldown = 0
 
     # Define the points of the displayable triangle
     def triangle(self):
@@ -53,11 +54,21 @@ class Player(CircleShape):
         self.position += forward * PLAYER_MOVE_SPEED * dt
 
     def shoot(self):
-        shot = Shot(self.position[0], self.position[1])
-        shot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * SHOT_SPEED
+        # Check if player can shoot
+        if (self.shootCooldown <= 0):
+            # Set shot cooldown timer to constant value
+            self.shootCooldown = PLAYER_SHOOT_COOLDOWN
+            # Create shot at own position
+            shot = Shot(self.position[0], self.position[1])
+            # Assign shot proper velocity based on own rotation and constant shot speed
+            shot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * SHOT_SPEED
 
-    # Catch rotate key-pressed and respond.
     def update(self, dt):
+        # Every update, reduce shot cooldown by deltaTime (dt) if it's not 0 or less.
+        if (self.shootCooldown > 0):
+            self.shootCooldown -= dt
+
+        # Catch key-pressed events and respond.
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             self.rotate(-dt)
