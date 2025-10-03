@@ -8,8 +8,8 @@ from constants import *
 from player import Player
 
 # Import Asteroid support
-from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from asteroid import Asteroid
 
 def main():
 
