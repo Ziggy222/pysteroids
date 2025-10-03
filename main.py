@@ -63,6 +63,11 @@ def main():
 
         # Update all updatable game objects
         updatable.update(deltaTimeSeconds)
+        # Check collision between any asteroid and the player
+        for asteroid in asteroids:
+            if (asteroid.check_collision(player)):
+                print("Game over!")
+                return
         
         # Render as final step before adjusting deltaTimeSeconds
         render()
