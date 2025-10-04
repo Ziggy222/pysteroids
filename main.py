@@ -25,6 +25,7 @@ def main():
     # Establish main clock object and deltaTime variable
     mainGameClock = pygame.time.Clock()
     deltaTimeSeconds = 0
+    game_active = True
 
     # Set up object Groups for pygame
     updatable = pygame.sprite.Group()
@@ -55,8 +56,7 @@ def main():
         pygame.display.flip()
         # END RENDERING FUNCTIONS
 
-    while(True):
-
+    while(game_active):
         # Enable close button
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -64,11 +64,15 @@ def main():
 
         # Update all updatable game objects
         updatable.update(deltaTimeSeconds)
-        # Check collision between any asteroid and the player
+
+        # Check asteroids collisions
         for asteroid in asteroids:
             if (asteroid.check_collision(player)):
-                print("Game over!")
                 return
+            for shot in shots:
+                if (asteroid.check_collision(shot)):
+                    shot.kill()
+                    asteroid.split()
         
         # Render as final step before adjusting deltaTimeSeconds
         render()
